@@ -14,7 +14,7 @@ def parse_ape(a):
         return None
 
     return {
-        "ape_id": parse_id(a),
+        "ape_id": a.get("asset").get("name"),
         "listing_event_id": a.get("id"),
         "listing_event_time": a.get("created_date"),
         "listing_price": (int(a.get("starting_price")) / 1000000000000000000),
