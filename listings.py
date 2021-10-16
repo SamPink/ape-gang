@@ -15,12 +15,25 @@ for i in range(0, 5000):
     print(i)
     try:
         apes = get_listings(i)
+
+        if apes.get("asset_events") == None:
+            break
     except:
         print("")
+
     for a in apes["asset_events"]:
         ape = parse_ape(a)
+
         if ape != None:
-            listing = listing.append(ape, ignore_index=True)
+            if listing.empty == False:
+                # check to see if listing is already sotred for ape
+                if listing[listing.ape_id == ape.get("ape_id")].empty == False:
+                    # drop previous listing
+                    listing = listing[listing.ape_id != ape.get("ape_id")]
+
+                listing = listing.append(ape, ignore_index=True)
+            else:
+                listing = listing.append(ape, ignore_index=True)
 
 all_apes = all_apes.merge(
     listing, left_on="ape_id", right_on="ape_id", how="left", suffixes=("_1", "_2")

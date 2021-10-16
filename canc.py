@@ -28,12 +28,16 @@ for i in range(0, 5000):
 
             # look for ape in listings
             ape_listing = listings.loc[listings["ape_id"].isin(df.ape_id)]
+            ape_listing_id = ape_listing.index.item()
 
             # if canc is after most recent listing
             if pd.notnull(ape_listing.listing_event_time.item()):
                 if df.canc_event_time.item() > ape_listing.listing_event_time.item():
-                    print("hey")
+                    # remove listing
+                    listings.at[ape_listing_id, "listing_price"] = None
+                    listings.at[ape_listing_id, "listing_event_id"] = None
+                    listings.at[ape_listing_id, "listing_event_time"] = None
+                    print(f"removed {ape_listing_id}")
 
-            # remove listing
         else:
             print("Done")
