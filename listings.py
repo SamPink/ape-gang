@@ -9,6 +9,10 @@ listings["listing_event_time"] = pd.to_datetime(listings["listing_event_time"])
 
 epoc_last_updated = listings.listing_event_time.max().value
 
+last_updated = pd.DataFrame({"lastUpdated": epoc_last_updated}, index=[0])
+
+last_updated.to_csv("csvs/lastUpdated.csv")
+
 listing = pd.DataFrame()
 
 """
@@ -44,6 +48,3 @@ for i in range(0, 1000):
 
 
 listings.to_csv("csvs/apes_with_listings.csv")
-
-last_updated = pd.DataFrame({"lastUpdated": epoc_last_updated}, index=[0])
-last_updated.to_csv("csvs/lastUpdated.csv")

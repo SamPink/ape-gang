@@ -21,11 +21,16 @@ epoc_last_updated = last_updated.lastUpdated.item()
 for i in range(0, 5000):
     print(i)
     try:
-        canc = get_canc(i, epoc_last_updated)
+        canc = get_canc(i)
+
+        if len(canc["asset_events"]) == 0:
+            break
     except Exception as e:
         print(e)
-    for c in canc:
+
+    for c in canc["asset_events"]:
         df = parse_ape_canc(c)
+        
         if df.empty == False:
             ape_id = df.ape_id.item()
             # convert canc event to dataframe
