@@ -2,7 +2,12 @@ import pandas as pd
 
 from helpers import *
 
-all_apes = pd.read_csv("csvs/all_the_apes.csv")
+# all_apes = pd.read_csv("csvs/all_the_apes.csv")
+listings = pd.read_csv("csvs/apes_with_listings.csv")
+
+listings["listing_event_time"] = pd.to_datetime(listings["listing_event_time"])
+
+epoc_last_updated = listings.listing_event_time.max().value
 
 listing = pd.DataFrame()
 
@@ -14,32 +19,31 @@ DONE
     when joining, need to prevent multiple being added
 """
 
-for i in range(0, 5000):
+for i in range(0, 1000):
     print(i)
     try:
-        apes = get_listings(i)
+        apes = get_listings(i, epoc_last_updated)
 
-        if apes.get("asset_events") == None:
+        if len(apes['asset_events']) == 0:
             break
-    except:
-        print("")
+
+    except Exception as e:
+        print(e)
 
     for a in apes["asset_events"]:
-        ape = parse_ape(a)
+        df = parse_ape(a)
 
-        if ape != None:
-            if listing.empty == False:
-                # check to see if listing is already sotred for ape
-                if listing[listing.ape_id == ape.get("ape_id")].empty == False:
-                    # skip are 2nd listing must be older
-                    continue
+        if df.empty == False:
+            print(df.listing_event_time)
+            ape_listing = listings.loc[listings["ape_id"].isin(df.ape_id)]
+            ape_listing_id = ape_listing.index.item()
 
-                listing = listing.append(ape, ignore_index=True)
-            else:
-                listing = listing.append(ape, ignore_index=True)
+            listings.at[ape_listing_id, "listing_price"] = df.listing_price.item()
+            listings.at[ape_listing_id, "listing_event_id"] = df.listing_event_id.item()
+            listings.at[ape_listing_id, "listing_event_time"] = df.listing_event_time.item()
 
-all_apes = all_apes.merge(
-    listing, left_on="ape_id", right_on="ape_id", how="left", suffixes=("_1", "_2")
-)
 
-all_apes.to_csv("csvs/apes_with_listings.csv")
+listings.to_csv("csvs/apes_with_listings.csv")
+
+last_updated = pd.DataFrame({"lastUpdated": epoc_last_updated}, index=[0])
+last_updated.to_csv("csvs/lastUpdated.csv")

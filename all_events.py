@@ -4,28 +4,19 @@ from pandas._libs.tslibs import NaT
 
 from helpers import *
 
-"""
-TODO
-    1. it would be more efficient to read all events at the same time, then sort them into time order and drop duplicates per apes
-"""
-
 # get all apes with listings
-listings = pd.read_csv("csvs/apes_with_listings.csv")
-listings.listing_event_time = listings.listing_event_time.astype("datetime64[ns]")
-# listings.ape_id = listings.ape_id.split("#")[1]
-last_updated = pd.read_csv("csvs/lastUpdated.csv")
-epoc_last_updated = last_updated.lastUpdated.item()
-
+listings = pd.read_csv("csvs/all_the_apes.csv")
 
 # loop throuh all canc events
 for i in range(0, 5000):
     print(i)
     try:
-        canc = get_canc(i, epoc_last_updated)
+        events = get_events(i)
     except Exception as e:
         print(e)
-    for c in canc:
-        df = parse_ape_canc(c)
+    for event in events:
+        print(event)
+        #df = parse_ape_canc(c)
         if df.empty == False:
             ape_id = df.ape_id.item()
             # convert canc event to dataframe
