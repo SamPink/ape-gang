@@ -19,7 +19,7 @@ for i in range(0, 50000):
         break
 
     for a in assets_events:
-        df = parse_ape(a)
+        df = parse_ape_listing(a)
         all_listings = all_listings.append(df)
 
 print(all_listings)
