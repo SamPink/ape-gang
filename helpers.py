@@ -103,3 +103,15 @@ def get_canc(i):
     url_canc = f"{base}events?collection_slug={slug}&event_type=cancelled&only_opensea=false&offset={i*50}&limit=50"
     response = requests.request("GET", url_canc)
     return response.json()
+
+#all_listings[all_listings.listing_event_time == all_listings.listing_event_time.max()]
+def get_max_listing(apes):
+    return apes[apes.listing_event_time == apes.listing_event_time.max()]
+
+#all_listings[all_listings.listing_event_time == all_listings.listing_event_time.max()]
+def get_max_canc(apes):
+    return apes[apes.canc_event_time == apes.canc_event_time.max()]
+
+#all_listings[all_listings.listing_event_time == all_listings.listing_event_time.max()]
+def get_max_sales(apes):
+    return apes[apes.sale_time == apes.sale_time.max()]
