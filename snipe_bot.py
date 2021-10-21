@@ -3,6 +3,12 @@ from datetime import datetime, timedelta
 
 from helpers import *
 
+"""
+TODO
+    1. implement transfer events
+    2. filter for the correct listing types https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/4981676894159712808201908443964193325271219637660871887967791658715116994561
+"""
+
 # check to make sure ape listing is not canc or sold
 def is_still_listed(ape):
     ape_id = ape.ape_id.item()

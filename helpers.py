@@ -19,6 +19,9 @@ def parse_ape_listing(a):
         "listing_event_id": a.get("id"),
         "listing_event_time": a.get("created_date"),
         "listing_price": (int(a.get("starting_price")) / 1000000000000000000),
+        "auction_type": a.get('auction_type'),
+        "is_private": a.get('is_private'),
+        "payment_token": a.get('payment_token').get('symbol'),
     }
 
     return pd.DataFrame(ape, index=[0])
@@ -106,12 +109,12 @@ def get_canc(i):
 
 #all_listings[all_listings.listing_event_time == all_listings.listing_event_time.max()]
 def get_max_listing(apes):
-    return apes[apes.listing_event_time == apes.listing_event_time.max()]
+    return apes[apes.listing_event_time == apes.listing_event_time.max()].head(1)
 
 #all_listings[all_listings.listing_event_time == all_listings.listing_event_time.max()]
 def get_max_canc(apes):
-    return apes[apes.canc_event_time == apes.canc_event_time.max()]
+    return apes[apes.canc_event_time == apes.canc_event_time.max()].head(1)
 
 #all_listings[all_listings.listing_event_time == all_listings.listing_event_time.max()]
 def get_max_sales(apes):
-    return apes[apes.sale_time == apes.sale_time.max()]
+    return apes[apes.sale_time == apes.sale_time.max()].head(1)

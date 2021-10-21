@@ -1,6 +1,4 @@
-import numpy
 import pandas as pd
-from pandas._libs.tslibs import NaT
 
 from helpers import *
 
@@ -23,4 +21,4 @@ for i in range(0, 50000):
         all_listings = all_listings.append(df)
 
 print(all_listings)
-all_listings.to_csv("all_listings.csv")
+all_listings.to_csv("all_listings2.csv")
