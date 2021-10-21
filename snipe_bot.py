@@ -34,7 +34,10 @@ def is_still_listed(ape):
 
 all_apes = pd.read_csv("csvs/all_the_apes.csv")
 
-all_listings = pd.read_csv("all_listings.csv")
+all_listings = pd.read_csv("all_listings2.csv")
+
+all_listings = all_listings[all_listings.auction_type != 'english']
+all_listings = all_listings[all_listings.is_private == False]
 
 all_listings.listing_event_time = all_listings.listing_event_time.astype(
     "datetime64[ns]"
