@@ -34,57 +34,56 @@ def is_still_listed(ape):
         return True
 
 
+##get all os data
 all_apes = pd.read_csv("csvs/all_the_apes.csv")
-
 all_listings = pd.read_csv("csvs/all_listings.csv")
-
 all_sales = pd.read_csv("csvs/all_sales.csv")
-
 all_canc = pd.read_csv("csvs/all_canc.csv")
 
+#filter listings
 all_listings = all_listings[all_listings.auction_type != "english"]
 all_listings = all_listings[all_listings.is_private == False]
-
-all_listings.listing_event_time = all_listings.listing_event_time.astype(
-    "datetime64[ns]"
-)
+all_listings.listing_event_time = all_listings.listing_event_time.astype("datetime64[ns]")
 
 all_canc.canc_event_time = all_canc.canc_event_time.astype("datetime64[ns]")
-
-all_listings = all_listings.merge(
-    all_apes, left_on="ape_id", right_on="ape_id", how="left"
-)
-
 all_sales.sale_time = all_sales.sale_time.astype("datetime64[ns]")
 
+#join trait data to listings
+all_listings = all_listings.merge(all_apes, left_on="ape_id", right_on="ape_id", how="left")
+
+#only get most recent sale per ape
 all_sales = all_sales.groupby("ape_id").apply(get_max_sales).reset_index(drop=True)
 
 # only sales this month
 all_sales = all_sales[all_sales.sale_time > datetime(2021, 10, 1)]
 
-
+#join trait data to sales
 all_sales = all_sales.merge(all_apes, left_on="ape_id", right_on="ape_id", how="left")
 
-recent_listings = (
-    all_listings.groupby("ape_id").apply(get_max_listing).reset_index(drop=True)
-)
+#only get most recent listing per ape
+recent_listings = (all_listings.groupby("ape_id").apply(get_max_listing).reset_index(drop=True))
 
+#only get most recent canc per ape
 recent_canc = all_canc.groupby("ape_id").apply(get_max_canc).reset_index(drop=True)
 
-# calcualtes the mean sale for a ape mouths
+# calcualtes the mean sale for a apes
 total_mean = all_sales.sale_price.mean()
 
+#used to store output
 good_listings = pd.DataFrame()
 
+#TODO expand this to all traits
 # loops through each mouth trait
 for mouth in all_sales.Mouth.unique():
 
+    #find the cheepest listing for that trait
     cheapest_listing = (
         recent_listings[recent_listings.Mouth == mouth]
         .sort_values(by="listing_price", ascending=True)
         .reset_index()
     )
 
+    #search through listings starting with the lowest
     for index, row in cheapest_listing.iterrows():
         listing = cheapest_listing.iloc[[index]]
         # need exception for transfer event
@@ -111,4 +110,4 @@ for mouth in all_sales.Mouth.unique():
             good_listings = good_listings.append(df_mouth, ignore_index=True)
             break
 
-print(good_listings)
+    print(good_listings)
