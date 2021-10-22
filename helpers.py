@@ -67,7 +67,7 @@ def parse_ape_offer(a):
 
 def parse_ape_canc(a):
     if a.get("asset") == None:
-        return None
+        return pd.DataFrame()
 
     ape = {
         "ape_id": a.get("asset").get("name"),
@@ -84,12 +84,6 @@ def get_listings(i, epoc_last_updated):
     return response.json()
 
 
-def get_listings(i):
-    url = f"{base}events?collection_slug={slug}&event_type=created&only_opensea=false&offset={i*50}&limit=50"
-    response = requests.request("GET", url)
-    return response.json()
-
-
 def get_events(i):
     url = f"https://api.opensea.io/api/v1/events?collection_slug=ape-gang&only_opensea=false&offset=0&limit=50"
     response = requests.request("GET", url)
@@ -102,8 +96,8 @@ def get_sales(i, epoc):
     return response.json()
 
 
-def get_canc(i):
-    url_canc = f"{base}events?collection_slug={slug}&event_type=cancelled&only_opensea=false&offset={i*50}&limit=50"
+def get_canc(i, epoc):
+    url_canc = f"{base}events?collection_slug={slug}&event_type=cancelled&only_opensea=false&occurred_after={epoc}&offset={i*50}&limit=50"
     response = requests.request("GET", url_canc)
     return response.json()
 

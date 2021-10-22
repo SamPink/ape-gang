@@ -1,3 +1,4 @@
 /__pycache__
 notebooks/.ipynb_checkpoints/*
 notebooks/.ipynb_checkpoints/*
+os_data_update/__pycache__/*

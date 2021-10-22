@@ -10,7 +10,7 @@ TODO
 """
 
 # get all apes with listings
-listings = pd.read_csv("csvs/apes_with_listings.csv")
+listings = pd.read_csv("csvs/all_listings.csv")
 listings.listing_event_time = listings.listing_event_time.astype("datetime64[ns]")
 # listings.ape_id = listings.ape_id.split("#")[1]
 last_updated = pd.read_csv("csvs/lastUpdated.csv")
