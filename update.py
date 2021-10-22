@@ -5,6 +5,9 @@ from os_data_update.store_canc import update_canc
 from os_data_update.store_listings import update_listings
 from os_data_update.store_sales import update_sales
 
+
+#test
+
 # get all apes with listings
 listings = pd.read_csv("csvs/all_listings.csv")
 listings.listing_event_time = listings.listing_event_time.astype("datetime64[ns]")
