@@ -29,7 +29,7 @@ def parse_ape_listing(a):
 
 def parse_ape_sale(a):
     if a.get("asset") == None:
-        return None
+        return pd.DataFrame()
 
     buyer_name = a.get("winner_account").get("user")
     if buyer_name != None:
@@ -96,8 +96,8 @@ def get_events(i):
     return response.json()["asset_events"]
 
 
-def get_sales(i):
-    url = f"{base}events?collection_slug={slug}&event_type=successful&only_opensea=false&offset={i*50}&limit=50"
+def get_sales(i, epoc):
+    url = f"{base}events?collection_slug={slug}&event_type=successful&occurred_after={epoc}&only_opensea=false&offset={i*50}&limit=50"
     response = requests.request("GET", url)
     return response.json()
 
