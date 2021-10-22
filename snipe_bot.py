@@ -6,7 +6,9 @@ from helpers import *
 """
 TODO
     1. implement transfer events
-    2. filter for the correct listing types https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/4981676894159712808201908443964193325271219637660871887967791658715116994561
+    2. check listing types for expire
+    
+    DONE - filter for the correct listing types https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/4981676894159712808201908443964193325271219637660871887967791658715116994561
 """
 
 # check to make sure ape listing is not canc or sold
@@ -36,7 +38,7 @@ all_apes = pd.read_csv("csvs/all_the_apes.csv")
 
 all_listings = pd.read_csv("all_listings2.csv")
 
-all_listings = all_listings[all_listings.auction_type != 'english']
+all_listings = all_listings[all_listings.auction_type != "english"]
 all_listings = all_listings[all_listings.is_private == False]
 
 all_listings.listing_event_time = all_listings.listing_event_time.astype(
@@ -93,13 +95,14 @@ for mouth in all_sales.Mouth.unique():
         ignore_index=True,
     )
 
-    cheapest_listing = (
-        recent_listings[recent_listings.Mouth == mouth]
-        .sort_values(by="listing_price", ascending=True)
-        .head(1)
-    )
+    cheapest_listing = recent_listings[recent_listings.Mouth == mouth].sort_values(
+        by="listing_price", ascending=True
+    ).reset_index()
 
-    #need exception for transfer event
-    if cheapest_listing.empty == False:
-        if is_still_listed(cheapest_listing):
-            print(cheapest_listing)
+    for index, row in cheapest_listing.iterrows():
+        listing = cheapest_listing.iloc[[index]]
+        # need exception for transfer event
+        if is_still_listed(listing):
+            print(listing)
+            print(mouth)
+            break
