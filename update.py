@@ -17,9 +17,12 @@ canc = update_canc(epoc_last_updated)
 
 sales = update_sales(epoc_last_updated)
 
+if listings == "done" and sales == "done" and canc == "done":
+    last_updated = pd.read_csv("csvs/lastUpdated.csv")
+    last_updated.at[0, "lastUpdated"] = epoc_last_updated
+    last_updated.to_csv("csvs/lastUpdated.csv")
 
-last_updated = pd.read_csv("csvs/lastUpdated.csv")
+    print("updated!")
 
-last_updated.at[0, "lastUpdated"] = epoc_last_updated
-
-last_updated.to_csv("csvs/lastUpdated.csv")
+else:
+    print("fucekd it")
