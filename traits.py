@@ -47,7 +47,7 @@ def get_good_listings(trait, ape_data):
                 
                 break
     # get good listings for trait
-    print(ape_data["good_listings"][trait].head())
+    # print(ape_data["good_listings"][trait].head())
         
 
 
