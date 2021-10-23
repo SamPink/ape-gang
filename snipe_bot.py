@@ -84,6 +84,8 @@ def get_good_listings_per_trait(ape_data):
     """
     for trait in ape_data["traits"]:
         get_good_listings(trait, ape_data)
+        # write each good listing for each trait to a csv file
+        ape_data["good_listings"][trait].to_csv(".\csvs\\" + trait + "_good_listings.csv")
 
 def main():
     ape_data = get_all_ape_data()
