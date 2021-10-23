@@ -1,0 +1,7 @@
+I think it would be good to do a really simple comparison using the 
+rarity factor combined with the number of traits vs the price.
+
+i.e. get all of the 1T, 2T, 3T, 4T apes into separate DF's 
+- combine the rarity count for each
+- decide which ones have the best value for money
+- best ratio of rarity to cost basically
