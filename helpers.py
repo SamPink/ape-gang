@@ -95,8 +95,8 @@ def get_listings(i, epoc_last_updated):
     response = requests.request("GET", url)
     return response.json()
 
-def get_transfers(i):
-    url = f"https://api.opensea.io/api/v1/events?collection_slug=ape-gang&event_type=transfer&only_opensea=false&offset={i*50}&limit=50"
+def get_transfers(i, epoc_last_updated):
+    url = f"https://api.opensea.io/api/v1/events?collection_slug=ape-gang&event_type=transfer&only_opensea=false&occurred_after={epoc_last_updated}&offset={i*50}&limit=50"
     response = requests.request("GET", url)
     return response.json()
 
