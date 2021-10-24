@@ -4,15 +4,14 @@ from helpers import *
 from os_data_update.store_canc import update_canc
 from os_data_update.store_listings import update_listings
 from os_data_update.store_sales import update_sales
-
-
-#test
+from os_data_update.store_transfer import update_transfer
 
 # get all apes with listings
 listings = pd.read_csv("csvs/all_listings.csv")
 listings.listing_event_time = listings.listing_event_time.astype("datetime64[ns]")
 epoc_last_updated = listings.listing_event_time.max().value
 
+transfers = update_transfer(epoc_last_updated)
 
 listings = update_listings(epoc_last_updated)
 
