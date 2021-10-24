@@ -1,10 +1,11 @@
 
 from numpy import NaN
+from pandas._libs.missing import NA
 from helpers import *
 import pandas as pd
-import math
 
 # traits: Clothes, Ears, Hat, Fur, Mouth, Eyes
+    
 
 def get_good_listings(trait, ape_data):
     """
@@ -90,8 +91,6 @@ def split_apes_by_num_traits():
     for i in range(1, 7):
         apes_by_num_traits[f"{i}T"] = pd.DataFrame()
 
-    # TODO there is probably a way to do this in pandas which is way better
-    # altho this data will never actually change, so who cares?
     for index, row in all_apes.iterrows():
         no_traits = 0
         for i in range(2,8):
@@ -100,15 +99,60 @@ def split_apes_by_num_traits():
         apes_by_num_traits[f"{no_traits}T"] = apes_by_num_traits[f"{no_traits}T"].append(row)
 
     for key, value in apes_by_num_traits.items():
-        value.to_csv(f".\csvs\\apes_by_trait_count\\{key}_apes.csv")
+        value.drop('Unnamed: 0', axis=1, inplace=True)
+        value.to_csv(f".\csvs\\apes_by_trait_count\\{key}_apes.csv", index=False)
 
     return apes_by_num_traits
 
-def get_rank_for_number_of_traits(apes):
+def get_rank_for_number_of_traits():
     """
     This function ranks each ape for the number of traits they have vs the rariry of their traits
     returns an object containing:
     ape_id
-     
+    
     """
-    pass
+    all_apes = pd.read_csv(".\\csvs\\all_the_apes.csv")
+    apes_by_num_traits = {}
+    for i in range(1, 7):
+        apes_by_num_traits[f"{i}T"] = pd.read_csv(f".\\csvs\\apes_by_trait_count\\{i}T_apes.csv")
+
+    for df in apes_by_num_traits.values():
+        col_names = df.columns
+        df["Sum Rarity"] = NaN
+        df["Mean Rarity"] = NaN
+        # loop all of the rows in the rarity 
+        #print(df.head())
+        for index, row in df.iterrows():
+            # loop trait values
+            ape_total_rarity = 0
+            no_traits = 0
+            for i in range(3,9):
+                # check for each of the values
+                if type(row[i]) == str:
+                    trait = col_names[i]
+                    rarity_for_ape = (all_apes[all_apes[trait] == row[i]].shape[0] / 10000) * 100
+                    ape_total_rarity += rarity_for_ape
+                    no_traits += 1
+                    # print(rarity_for_ape)
+            # val_to_add = pd.Series(ape_total_rarity)
+            df.at[index, "Sum Rarity"] = ape_total_rarity
+            df.at[index, "Mean Rarity"] = ape_total_rarity/no_traits
+        
+        df = df.sort_values("Mean Rarity")
+        df.head()
+    
+    for i in range(1, 7):
+        apes_by_num_traits[f"{i}T"].to_csv(f".\\csvs\\apes_by_trait_count\\{i}T_rar_apes.csv", index=False)
+
+        
+            # where trait is the trait we are looking for 
+           
+    
+    # so we wanna get the specific trait from the ape
+
+    # then get the value counts of ALL apes
+
+    # then extract the value count for that trait
+
+# split_apes_by_num_traits()
+get_rank_for_number_of_traits()
