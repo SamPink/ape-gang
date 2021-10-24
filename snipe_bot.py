@@ -41,7 +41,7 @@ def get_all_ape_data():
 
     #join trait data to sales
     all_sales = all_sales.merge(all_apes, left_on="ape_id", right_on="ape_id", how="left")
-    print(all_sales.head())
+    # print(all_sales.head())
     #only get most recent listing per ape
     recent_listings = (all_listings.groupby("ape_id").apply(get_max_listing).reset_index(drop=True))
 
@@ -63,7 +63,7 @@ def get_all_ape_data():
     for trait in traits:
         good_listings[trait] = pd.DataFrame()
 
-    print(good_listings)
+    # print(good_listings)
     # call to func to get best listings for a specfic trait
 
     ape_data["traits"] = traits
@@ -84,6 +84,10 @@ def get_good_listings_per_trait(ape_data):
     """
     for trait in ape_data["traits"]:
         get_good_listings(trait, ape_data)
+        # write each good listing for each trait to a csv file
+        ape_data["good_listings"][trait].to_csv(".\csvs\\good_apes_by_trait\\" + trait + "_good_listings.csv")
+
+
 
 def main():
     ape_data = get_all_ape_data()
