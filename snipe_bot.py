@@ -11,6 +11,8 @@ TODO
     DONE - filter for the correct listing types
 """
 
+
+
 def get_all_ape_data():
     """
     Gets all the ape data and returns it in a dictionary
